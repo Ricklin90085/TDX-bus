@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NuxtLink to="/">index</NuxtLink>
     <NuxtPage />
+    <Menu />
   </div>
 </template>

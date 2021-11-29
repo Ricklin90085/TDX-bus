@@ -1,41 +1,30 @@
 <template>
-  <div>
-    {{ citySelected }}
-    <Listbox as="div" v-model="citySelected">
-      <div class="mt-1 relative">
-        <ListboxButton class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-          <span class="block truncate">{{ citySelected.name }}</span>
-          <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-            <SelectorIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
-          </span>
-        </ListboxButton>
-
-        <transition leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
-          <ListboxOptions class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-            <ListboxOption as="template" v-for="city in cityData" :key="city.value" :value="city" v-slot="{ active, selected }"  @click="refresh">
-              <li :class="[active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9']">
-                <span :class="[selected ? 'font-semibold' : 'font-normal', 'block truncate']">
-                  {{ city.name }}
-                </span>
-
-                <span v-if="selected" :class="[active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4']">
-                  <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                </span>
-              </li>
-            </ListboxOption>
-          </ListboxOptions>
-        </transition>
-      </div>
-    </Listbox>
-    {{ data[0] }}
+  <div class="p-6">
+    <img src="/logo.svg" class="w-[125px]" alt="logo">
+    <div class="flex justify-center mt-7 mb-6">
+      <img src="/home-banner.svg" alt="home banner">
+    </div>
+    <div class="flex items-center mb-2 px-4 py-3 bg-dark-400 rounded-xl">
+      <input type="text" class="w-full text-bodyM bg-transparent" placeholder="搜尋公車路線">
+      <button class="ml-2 p-1 bg-dark-600 rounded-xl">
+        <IconSearch class="fill-current" />
+      </button>
+    </div>
+    <ul class="text-bodyM divide-y">
+      <li v-for="i in 12" :key="i" class="py-4">
+        <span class="inline-block mr-6">
+          綠1
+        </span>
+        <span>
+          捷運北屯總站  - 仁友停車場 
+        </span>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script setup>
   import jsSHA from "jssha"
-  import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions } from '@headlessui/vue'
-  import { CheckIcon, SelectorIcon } from '@heroicons/vue/solid'
-
 
   const TDX_API_ID = 'bd0538fd14464e0eb17e1c3139015493'
   const TDX_API_KEY = 'E5Zow0RRsldm03i8ER95BFbjJTM'
@@ -81,11 +70,9 @@
       return { 'Authorization': Authorization, 'X-Date': GMTString /*,'Accept-Encoding': 'gzip'*/} //如果要將js運行在伺服器，可額外加入 'Accept-Encoding': 'gzip'，要求壓縮以減少網路傳輸資料量
   }
 
-  const { data, refresh } = await useAsyncData(`/v2/Bus/StopOfRoute/City/${citySelected.value.value}`, () => $fetch(`/v2/Bus/StopOfRoute/City/${citySelected.value.value}`, {
+  const { data } = await useFetch('/v2/Bus/EstimatedTimeOfArrival/City/Taichung', {
     baseURL: TDX_BASE_URL,
     headers: getAuthorizationHeader()
-  }))
-
-  console.log(data)
+  })
 
 </script>

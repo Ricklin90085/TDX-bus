@@ -1,0 +1,6 @@
+@layer base {
+  html {
+    @apply bg-dark-200 text-white;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+}
